@@ -4,7 +4,7 @@ cask "countdown" do
 
   url "https://github.com/larjudge/countdown/releases/download/v#{version}/Countdown-#{version}.zip"
   name "Countdown"
-  desc "Countdown timer that lives in the menu bar"
+  desc "Timer that counts down live in the menu bar"
   homepage "https://github.com/larjudge/countdown"
 
   livecheck do
@@ -12,15 +12,14 @@ cask "countdown" do
     strategy :github_latest
   end
 
-  depends_on macos: ">= :sequoia"
+  depends_on macos: :sequoia
 
   app "Countdown.app"
 
   # The app is ad-hoc signed rather than notarized, so clear the quarantine
   # flag to let it launch without a Gatekeeper prompt.
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Countdown.app"]
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/Countdown.app"]
   end
 
   uninstall quit:       "dev.lar.Countdown",
